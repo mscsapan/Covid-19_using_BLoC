@@ -9,11 +9,18 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Covid19Cubit covid = BlocProvider.of<Covid19Cubit>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Covid19'),
+        title: BlocBuilder<Covid19Cubit, List<Covid19>>(
+          builder: (context, state) {
+            if (state.isEmpty) {
+              return const Text('Loading...');
+            }
+            return const Text('All Country');
+          },
+        ),
         centerTitle: true,
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search))],
       ),
       body: BlocBuilder<Covid19Cubit, List<Covid19>>(
         builder: (context, List<Covid19> covidState) {
@@ -22,6 +29,7 @@ class HomeScreen extends StatelessWidget {
           } else {
             return ListView.builder(
               itemCount: covidState.length,
+              physics: const BouncingScrollPhysics(),
               itemBuilder: (context, position) {
                 final Covid19 covid = covidState[position];
                 return ListTile(
@@ -43,6 +51,12 @@ class HomeScreen extends StatelessWidget {
                       builder: (context) => DetailScreen(
                         country: covid.country.toString(),
                         image: covid.countryInfo!.flag.toString(),
+                        newCases: covid.todayCases!.toDouble(),
+                        totalCases: covid.cases!.toDouble(),
+                        todayDeath: covid.todayDeaths!.toDouble(),
+                        totalDeath: covid.deaths!.toDouble(),
+                        active: covid.active!.toDouble(),
+                        recovered: covid.recovered!.toDouble(),
                       ),
                     ),
                   ),

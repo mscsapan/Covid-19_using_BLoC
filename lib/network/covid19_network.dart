@@ -1,5 +1,4 @@
 import 'package:covid19_with_bloc/model/covid19_model.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Covid19Network {
@@ -9,7 +8,7 @@ class Covid19Network {
     http.Response response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final result = covid19FromJson(response.body);
-      debugPrint('${result.length}');
+      //debugPrint('${result.length}');
       return result;
     } else {
       throw Exception('Failed To Load..😔');
